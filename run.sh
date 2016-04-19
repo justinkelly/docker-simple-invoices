@@ -5,4 +5,4 @@
 
 chmod -Rf 777 /srv/tmp
 
-exec /usr/bin/caddy --conf /etc/Caddyfile
+exec caddy --conf /etc/Caddyfile
