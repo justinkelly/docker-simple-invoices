@@ -13,7 +13,7 @@ RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
 
 RUN curl --silent --show-error --fail --location \
       --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-      "https://caddyserver.com/download/build?os=linux&arch=amd64&features=git" \
+      "https://caddyserver.com/download/build?os=linux&arch=amd64" \
     | tar --no-same-owner -C /usr/bin/ -xz caddy \
  && chmod 0755 /usr/bin/caddy \
  && /usr/bin/caddy -version
@@ -40,6 +40,8 @@ ENV SMTP_SECURE="SMTP_SECURE"
 ADD s3 /s3
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
+RUN /run.sh
+
 ADD simpleinvoices/ /srv
 ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
 
