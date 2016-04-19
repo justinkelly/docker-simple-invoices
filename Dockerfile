@@ -49,4 +49,6 @@ WORKDIR /srv
 
 ADD Caddyfile /etc/Caddyfile
 
-CMD ["/run.sh"]
+ENTRYPOINT ["/usr/bin/caddy"]
+CMD ["--conf", "/etc/Caddyfile"]
+#CMD ["/run.sh"]
