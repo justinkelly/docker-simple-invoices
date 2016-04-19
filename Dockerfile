@@ -3,20 +3,20 @@ MAINTAINER Justin Kelly <justin@kelly.org.au>
 
 LABEL caddy_version="0.8.2" architecture="amd64"
 
-RUN apk add --update caddy php-fpm 
+RUN apk add --update caddy php7-fpm 
 
 # essential php libs
-RUN apk add php-pdo php-pdo_mysql php-curl php-gd php-iconv php-mysql php-mysqli php-json php-xml ssmtp
+RUN apk add php7-pdo php7-pdo_mysql php7-curl php7-gd php7-iconv php7-mysql php7-mysqli php7-json php7-xml ssmtp
 
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
 
-RUN curl --silent --show-error --fail --location \
-      --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-      "https://caddyserver.com/download/build?os=linux&arch=amd64&features=git" \
-    | tar --no-same-owner -C /usr/bin/ -xz caddy \
- && chmod 0755 /usr/bin/caddy \
- && /usr/bin/caddy -version
+#RUN curl --silent --show-error --fail --location \
+#      --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
+#      "https://caddyserver.com/download/build?os=linux&arch=amd64&features=git" \
+#    | tar --no-same-owner -C /usr/bin/ -xz caddy \
+# && chmod 0755 /usr/bin/caddy \
+# && /usr/bin/caddy -version
 
 #Si settings
 ENV SI_AUTH="SI_AUTH"
