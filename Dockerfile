@@ -38,11 +38,10 @@ ENV SMTP_SECURE="SMTP_SECURE"
 
 # Add image configuration and scripts
 ADD s3 /s3
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
 ADD simpleinvoices/ /srv
 ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
-
-RUN /s3 --region "${AWS_REGION}" sync s3://docker-files.invoice.im/${DOMAIN}/logo/ /app/templates/invoices/logos/
-RUN /s3 --region "${AWS_REGION}" sync s3://docker-files.invoice.im/${DOMAIN}/template/ /app/templates/invoices/
 
 EXPOSE 80 443 2015
 
@@ -50,5 +49,4 @@ WORKDIR /srv
 
 ADD Caddyfile /etc/Caddyfile
 
-ENTRYPOINT ["/usr/bin/caddy"]
-CMD ["--conf", "/etc/Caddyfile"]
+CMD ["/run.sh"]
