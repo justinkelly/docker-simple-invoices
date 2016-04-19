@@ -40,7 +40,6 @@ ENV SMTP_SECURE="SMTP_SECURE"
 ADD s3 /s3
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
-RUN 'chmod -Rf 777 /srv/tmp'
 #RUN /run.sh
 
 ADD simpleinvoices/ /srv
@@ -52,6 +51,6 @@ WORKDIR /srv
 
 ADD Caddyfile /etc/Caddyfile
 
-ENTRYPOINT ["/usr/bin/caddy"]
-CMD ["--conf", "/etc/Caddyfile"]
-#CMD ["/run.sh"]
+#ENTRYPOINT ["/usr/bin/caddy"]
+#CMD ["--conf", "/etc/Caddyfile"]
+CMD ["/run.sh"]
