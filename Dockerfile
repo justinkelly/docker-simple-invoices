@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:edge
 MAINTAINER Justin Kelly <justin@kelly.org.au>
 
 LABEL caddy_version="0.8.2" architecture="amd64"
