@@ -1,12 +1,12 @@
-FROM alpine:3.2
-MAINTAINER Abiola Ibrahim <abiola89@gmail.com>
+FROM alpine:latest
+MAINTAINER Justin Kelly <justin@kelly.org.au>
 
 LABEL caddy_version="0.8.2" architecture="amd64"
 
 RUN apk add --update openssh-client git tar php-fpm
 
 # essential php libs
-RUN apk add php-curl php-gd php-zip php-iconv php-sqlite3 php-mysql php-mysqli php-json php-xml
+RUN apk add php-curl php-gd php-iconv php-mysql php-mysqli php-json php-xml ssmtp
 
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
@@ -18,12 +18,37 @@ RUN curl --silent --show-error --fail --location \
  && chmod 0755 /usr/bin/caddy \
  && /usr/bin/caddy -version
 
+#Si settings
+ENV SI_AUTH="SI_AUTH"
+ENV DB_HOST="DB_HOST"
+ENV DB_NAME="DB_NAME"
+ENV DB_PASS="DB_PASS"
+ENV DB_PORT="3306"
+ENV DB_USER="DB_USER"
+ENV VIRTUAL_HOST="VIRTUAL_HOST"
+ENV DOMAIN="DOMAIN"
+ENV AWS_REGION="AWS_REGION"
+ENV AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID"
+ENV AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
+ENV SMTP_HOST="SMTP_HOST"
+ENV SMTP_PASS="SMTP_PASS"
+ENV SMTP_USER="SMTP_USER"
+ENV SMTP_PORT="SMTP_POST"
+ENV SMTP_SECURE="SMTP_SECURE"
+
+# Add image configuration and scripts
+ADD s3 /s3
+ADD simpleinvoices/ /srv
+ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
+
+RUN /s3 --region "${AWS_REGION}" sync s3://docker-files.invoice.im/${DOMAIN}/logo/ /app/templates/invoices/logos/
+RUN /s3 --region "${AWS_REGION}" sync s3://docker-files.invoice.im/${DOMAIN}/template/ /app/templates/invoices/
+
 EXPOSE 80 443 2015
 
 WORKDIR /srv
 
 ADD Caddyfile /etc/Caddyfile
-ADD index.php /srv/index.php
 
 ENTRYPOINT ["/usr/bin/caddy"]
 CMD ["--conf", "/etc/Caddyfile"]

@@ -1,11 +1,12 @@
 0.0.0.0
 
 root /srv
+
 tls off
 
 fastcgi / 127.0.0.1:9000 php
 
-startup php-fpm
+startup php7-fpm
 
 log stdout
 
