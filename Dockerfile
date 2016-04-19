@@ -6,7 +6,7 @@ LABEL caddy_version="0.8.2" architecture="amd64"
 RUN apk add --update openssh-client git tar php-fpm
 
 # essential php libs
-RUN apk add php-curl php-gd php-zip php-iconv php-sqlite3 php-mysql php-mysqli php-json
+RUN apk add php-curl php-gd php-zip php-iconv php-sqlite3 php-mysql php-mysqli php-json php-xml
 
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
@@ -19,7 +19,7 @@ RUN curl --silent --show-error --fail --location \
  && /usr/bin/caddy -version
 
 EXPOSE 80 443 2015
-VOLUME /srv
+
 WORKDIR /srv
 
 ADD Caddyfile /etc/Caddyfile

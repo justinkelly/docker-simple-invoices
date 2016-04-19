@@ -1,6 +1,7 @@
 0.0.0.0
 
-browse
+root /srv
+tls off
 
 fastcgi / 127.0.0.1:9000 php
 
