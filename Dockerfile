@@ -40,8 +40,8 @@ ENV SMTP_SECURE="SMTP_SECURE"
 ADD s3 /s3
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
-RUN chmod -R 755 /srv/tmp
-RUN /run.sh
+RUN chmod -fR 755 /srv/tmp
+#RUN /run.sh
 
 ADD simpleinvoices/ /srv
 ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
