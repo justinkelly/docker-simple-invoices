@@ -3,7 +3,7 @@ MAINTAINER Justin Kelly <justin@kelly.org.au>
 
 LABEL caddy_version="0.8.2" architecture="amd64"
 
-RUN apk add --update openssh-client git tar php-fpm
+RUN apk add --update caddy php-fpm 
 
 # essential php libs
 RUN apk add php-pdo php-pdo_mysql php-curl php-gd php-iconv php-mysql php-mysqli php-json php-xml ssmtp
@@ -13,7 +13,7 @@ RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
 
 RUN curl --silent --show-error --fail --location \
       --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-      "https://caddyserver.com/download/build?os=linux&arch=amd64" \
+      "https://caddyserver.com/download/build?os=linux&arch=amd64&features=git" \
     | tar --no-same-owner -C /usr/bin/ -xz caddy \
  && chmod 0755 /usr/bin/caddy \
  && /usr/bin/caddy -version
