@@ -59,9 +59,11 @@ ADD run.sh /run.sh
 RUN chmod 755 /run.sh
 ADD simpleinvoices/ /v
 ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
-
+RUN mkdir /usr/local/share/ca-certificates/cacert.org
+ADD certs/root.crt /usr/local/share/ca-certificates/cacert.org
+ADD certs/class3.crt /usr/local/share/ca-certificates/cacert.org
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
-
+RUN update-ca-certificates
 #add folders
 ADD simpleinvoices/ /app
 
