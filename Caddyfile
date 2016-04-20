@@ -1,13 +1,11 @@
-:443
+0.0.0.0
 
 root /srv
-
-tls caddy@email.com
 
 fastcgi / 127.0.0.1:9000 php
 
 startup php-fpm
 
-log /var/log/caddy.log
+log stdout
 
-errors /var/log/caddy_error.log
+errors visible
