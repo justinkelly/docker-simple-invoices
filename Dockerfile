@@ -29,7 +29,7 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
 RUN apk add --update caddy 
 
 # allow environment variable access.
-RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
+RUN echo "clear_env = no" >> /etc/php7/php-fpm.conf
 
 #RUN curl --silent --show-error --fail --location \
 #      --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
