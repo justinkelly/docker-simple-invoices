@@ -1,36 +1,38 @@
-FROM alpine:edge
+FROM debian:jessie
 MAINTAINER Justin Kelly <justin@kelly.org.au>
 
-LABEL caddy_version="0.8.2" architecture="amd64"
+# Usage:
+# docker run -d --name=apache-php -p 8080:80 -p 8443:443 chriswayg/apache-php
+# webroot: /var/www/html/
+# Apache2 config: /etc/apache2/
 
-RUN apk add --update php-apache2 curl php-cli 
+RUN apt-get update && \
+      DEBIAN_FRONTEND=noninteractive apt-get -y install \
+      apache2 \
+      libapache2-mod-php5 \
+      php5 \
+	php5-mysql \
+	php5-curl \
+	php5-imap \
+	php5-gd \
+	php5-mcrypt \
+	php5-json \
+	php5-xml \
+	php5-xsl \
+	ssmtp && \
+    apt-get clean && rm -r /var/lib/apt/lists/*
 
-# essential php libs
-RUN apk add php-openssl \
-	php-pdo \
-	php-pdo_mysql \
-	php-curl \
-	php-imap \
-	php-gd \
-	php-mcrypt \
-	php-iconv \
-	php-mysql \
-	php-mysqli \
-	php-json \
-	php-xml \
-	php-ctype \
-	php-xsl \
-	ssmtp
+# Apache + PHP requires preforking Apache for best results & enable Apache SSL
+# forward request and error logs to docker log collector
+RUN a2dismod mpm_event && \
+    a2enmod mpm_prefork \
+            ssl \
+            rewrite && \
+    a2ensite default-ssl && \
+    ln -sf /dev/stdout /var/log/apache2/access.log && \
+    ln -sf /dev/stderr /var/log/apache2/error.log
 
-# allow environment variable access.
-RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
 
-#RUN curl --silent --show-error --fail --location \
-#      --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-#      "https://caddyserver.com/download/build?os=linux&arch=amd64&features=git" \
-#    | tar --no-same-owner -C /usr/bin/ -xz caddy \
-# && chmod 0755 /usr/bin/caddy \
-# && /usr/bin/caddy -version
 
 #Si settings
 ENV SI_AUTH="SI_AUTH"
@@ -53,33 +55,18 @@ ENV SMTP_SECURE="SMTP_SECURE"
 # Add config files
 ADD s3 /s3
 ADD run.sh /run.sh
-ADD simpleinvoices/ /srv
+ADD simpleinvoices/ /v
 ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
-ADD Caddyfile /etc/Caddyfile
 
-RUN chmod 755 /*.sh && \
-mkdir /app && chown -R apache:apache /app && \
-sed -i 's#^DocumentRoot ".*#DocumentRoot "/app"#g' /etc/apache2/httpd.conf && \
-sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
-echo "Success"
+RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 
-#RUN /run.sh
-# ensure www-data user exists
-RUN set -x \
-	&& addgroup -g 82 -S www-data \
-	&& adduser -u 82 -D -S -G www-data www-data
-# 82 is the standard uid/gid for "www-data" in Alpine
+#add folders
+ADD simpleinvoices/ /app
 
-# php-fpm user permissions
-RUN chown -Rf www-data:www-data /srv/tmp
-RUN sed -i -e "s/group = nobody/group = www-data/g" /etc/php/php-fpm.conf && \
-sed -i -e "s/user = nobody/user = www-data/g" /etc/php/php-fpm.conf 
+RUN chown -Rf www-data:www-data /app/tmp
 
-EXPOSE 80 443 2015
+EXPOSE 80 443
 
-WORKDIR /srv
+WORKDIR /var/www/html
 
-
-#ENTRYPOINT ["/usr/bin/caddy"]
-#CMD ["--conf", "/etc/Caddyfile"]
 CMD ["/run.sh"]
