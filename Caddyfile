@@ -2,8 +2,6 @@
 
 root /srv
 
-tls off
-
 fastcgi / 127.0.0.1:9000 php
 
 startup php-fpm
