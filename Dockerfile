@@ -23,6 +23,11 @@ RUN apk add openssl \
 	php-ctype \
 	php-xsl ssmtp
 
+#certs
+RUN apk --update upgrade && \
+    apk add curl ca-certificates && \
+    update-ca-certificates && \
+    rm -rf /var/cache/apk/*
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
 
