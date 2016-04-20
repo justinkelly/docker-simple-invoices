@@ -7,20 +7,19 @@ MAINTAINER Justin Kelly <justin@kelly.org.au>
 # Apache2 config: /etc/apache2/
 
 RUN apt-get update && \
-      DEBIAN_FRONTEND=noninteractive apt-get -y install \
-      apache2 \
-      libapache2-mod-php5 \
-      php5 \
+	DEBIAN_FRONTEND=noninteractive apt-get -y install \
+	apache2 \
+	libapache2-mod-php5 \
+	php5 \
 	php5-mysql \
 	php5-curl \
 	php5-imap \
 	php5-gd \
 	php5-mcrypt \
 	php5-json \
-	php5-xml \
 	php5-xsl \
 	ssmtp && \
-    apt-get clean && rm -r /var/lib/apt/lists/*
+	apt-get clean && rm -r /var/lib/apt/lists/*
 
 # Apache + PHP requires preforking Apache for best results & enable Apache SSL
 # forward request and error logs to docker log collector
