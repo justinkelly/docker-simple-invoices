@@ -6,7 +6,22 @@ LABEL caddy_version="0.8.2" architecture="amd64"
 RUN apk add --update caddy php-fpm 
 
 # essential php libs
-RUN apk add openssl openssl-dev php-openssl php-pdo php-pdo_mysql php-curl php-gd php-mcrypt php-iconv php-mysql php-mysqli php-json php-xml php-ctype php-xsl ssmtp
+RUN apk add openssl \
+	openssl-dev \
+ 	php-openssl \
+	php-pdo \
+	php-pdo_mysql \
+	php-curl \
+	php-imap \
+	php-gd \
+	php-mcrypt \
+	php-iconv \
+	php-mysql \
+	php-mysqli \
+	php-json \
+	php-xml \
+	php-ctype \
+	php-xsl ssmtp
 
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
