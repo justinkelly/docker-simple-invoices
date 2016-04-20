@@ -36,14 +36,24 @@ ENV SMTP_USER="SMTP_USER"
 ENV SMTP_PORT="SMTP_POST"
 ENV SMTP_SECURE="SMTP_SECURE"
 
-# Add image configuration and scripts
+# Add config files
 ADD s3 /s3
 ADD run.sh /run.sh
-RUN chmod 755 /*.sh
-#RUN /run.sh
-
 ADD simpleinvoices/ /srv
 ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
+
+RUN chmod 755 /*.sh
+#RUN /run.sh
+# ensure www-data user exists
+RUN set -x \
+	&& addgroup -g 82 -S www-data \
+	&& adduser -u 82 -D -S -G www-data www-data
+# 82 is the standard uid/gid for "www-data" in Alpine
+
+# php-fpm user permissions
+RUN chown -Rf www-data:www-data /srv/tmp
+RUN sed -i -e "s/group = nobody/group = www-data/g" /etc/php/php-fpm.conf && \
+sed -i -e "s/user = nobody/user = www-data/g" /etc/php/php-fpm.conf
 
 EXPOSE 80 443 2015
 
