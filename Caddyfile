@@ -2,6 +2,8 @@
 
 root /srv
 
+tls caddy@email.com
+
 fastcgi / 127.0.0.1:9000 php
 
 startup php-fpm
