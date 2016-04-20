@@ -73,8 +73,8 @@ RUN set -x \
 
 # php-fpm user permissions
 RUN chown -Rf www-data:www-data /srv/tmp
-RUN sed -i -e "s/group = nobody/group = www-data/g" /etc/php/php-fpm.conf && \
-sed -i -e "s/user = nobody/user = www-data/g" /etc/php/php-fpm.conf 
+RUN sed -i -e "s/group = nobody/group = www-data/g" /etc/php7/php-fpm.conf && \
+sed -i -e "s/user = nobody/user = www-data/g" /etc/php7/php-fpm.conf 
 
 EXPOSE 80 443 2015
 
