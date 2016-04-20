@@ -62,8 +62,8 @@ ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
 RUN mkdir /usr/local/share/ca-certificates/cacert.org
 ADD certs/root.crt /usr/local/share/ca-certificates/cacert.org
 ADD certs/class3.crt /usr/local/share/ca-certificates/cacert.org
-RUN sed -i -e "s/;openssl.cafile=/openssl.cafile =  /etc/ssl/certs/root.pem/g" /etc/php5/apache.ini && \
-sed -i -e "s/;openssl.capath=/openssl.capath = /etc/ssl/certs/g" /etc/php5/apache.ini 
+RUN sed -i -e "s/;openssl.cafile=/openssl.cafile = \/etc\/ssl\/certs\/root.pem/g" /etc/php5/apache2/php.ini && \
+sed -i -e "s/;openssl.capath=/openssl.capath = \/etc\/ssl\/certs\//g" /etc/php5/apache2/php.ini
 
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 RUN update-ca-certificates
