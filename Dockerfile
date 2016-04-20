@@ -12,7 +12,6 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
         php7-intl \
         php7-json \
         php7-mbstring \
-        php7-mysql \
         php7-mysqli \
         php7-mysqlnd \
         php7-opcache \
@@ -21,7 +20,7 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositor
         php7-pdo_mysql \
         php7-posix \
         php7-session \
-        php7-xml \	
+        php7-sockets \
         php7-xml \	
         php7-xsl \	
 	ssmtp \
