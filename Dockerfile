@@ -8,6 +8,8 @@ MAINTAINER Justin Kelly <justin@kelly.org.au>
 
 RUN apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get -y install \
+	openssl \
+	ca-certificates \
 	apache2 \
 	libapache2-mod-php5 \
 	php5 \
