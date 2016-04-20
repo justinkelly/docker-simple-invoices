@@ -1,27 +1,36 @@
 FROM alpine:edge
 MAINTAINER Justin Kelly <justin@kelly.org.au>
 
-LABEL caddy_version="0.8.2" architecture="amd64"
+RUN echo "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    apk --update add \
+        php7-dom \
+	php7-openssl \
+        php7-ctype \
+        php7-curl \
+        php7-fpm \
+        php7-gd \
+        php7-intl \
+        php7-json \
+        php7-mbstring \
+        php7-mysql \
+        php7-mysqli \
+        php7-mysqlnd \
+        php7-opcache \
+        php7-iconv \
+        php7-pdo \
+        php7-pdo_mysql \
+        php7-posix \
+        php7-session \
+        php7-xml \	
+        php7-xml \	
+        php7-xsl \	
+	ssmtp \
+    && rm -rf /var/cache/apk/*
 
-RUN apk add --update caddy php-fpm 
+COPY php.ini /etc/php7/conf.d/50-setting.ini
+COPY php-fpm.conf /etc/php7/php-fpm.conf
 
-# essential php libs
-RUN apk add openssl \
-	openssl-dev \
- 	php-openssl \
-	php-pdo \
-	php-pdo_mysql \
-	php-curl \
-	php-imap \
-	php-gd \
-	php-mcrypt \
-	php-iconv \
-	php-mysql \
-	php-mysqli \
-	php-json \
-	php-xml \
-	php-ctype \
-	php-xsl ssmtp
+RUN apk add --update caddy 
 
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
