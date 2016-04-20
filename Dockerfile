@@ -3,12 +3,10 @@ MAINTAINER Justin Kelly <justin@kelly.org.au>
 
 LABEL caddy_version="0.8.2" architecture="amd64"
 
-RUN apk add --update caddy php-fpm 
+RUN apk add --update php-apache2 curl php-cli 
 
 # essential php libs
-RUN apk add openssl \
-	openssl-dev \
- 	php-openssl \
+RUN apk add php-openssl \
 	php-pdo \
 	php-pdo_mysql \
 	php-curl \
@@ -21,7 +19,8 @@ RUN apk add openssl \
 	php-json \
 	php-xml \
 	php-ctype \
-	php-xsl ssmtp
+	php-xsl \
+	ssmtp
 
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
@@ -58,7 +57,12 @@ ADD simpleinvoices/ /srv
 ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
 ADD Caddyfile /etc/Caddyfile
 
-RUN chmod 755 /*.sh
+RUN chmod 755 /*.sh && \
+mkdir /app && chown -R apache:apache /app && \
+sed -i 's#^DocumentRoot ".*#DocumentRoot "/app"#g' /etc/apache2/httpd.conf && \
+sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
+echo "Success"
+
 #RUN /run.sh
 # ensure www-data user exists
 RUN set -x \

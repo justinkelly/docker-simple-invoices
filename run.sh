@@ -9,4 +9,16 @@ echo "AuthUser=${SMTP_USER}" >> /etc/ssmtp/ssmtp.conf
 echo "AuthPass=${SMTP_PASS}" >> /etc/ssmtp/ssmtp.conf
 echo "UseSTARTTLS=YES" >> /etc/ssmtp/ssmtp.conf
 
-exec caddy --conf /etc/Caddyfile
+# set apache as owner/group
+if [ "$FIX_OWNERSHIP" != "" ]; then
+	chown -R apache:apache /app
+fi
+
+# display logs
+tail -F /var/log/apache2/*log &
+
+
+echo "[i] Starting daemon..."
+# run apache httpd daemon
+httpd -D FOREGROUND
+
