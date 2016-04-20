@@ -6,7 +6,7 @@ LABEL caddy_version="0.8.2" architecture="amd64"
 RUN apk add --update caddy php-fpm 
 
 # essential php libs
-RUN apk add php-openssl php-pdo php-pdo_mysql php-curl php-gd php-iconv php-mysql php-mysqli php-json php-xml php-ctype php-xsl ssmtp
+RUN apk add openssl openssl-dev php-openssl php-pdo php-pdo_mysql php-curl php-gd php-iconv php-mysql php-mysqli php-json php-xml php-ctype php-xsl ssmtp
 
 # allow environment variable access.
 RUN echo "clear_env = no" >> /etc/php/php-fpm.conf
@@ -56,10 +56,9 @@ RUN sed -i -e "s/group = nobody/group = www-data/g" /etc/php/php-fpm.conf && \
 sed -i -e "s/user = nobody/user = www-data/g" /etc/php/php-fpm.conf
 
 #set ssmtp details
-RUN  echo "mailhub=${SMTP_HOST}:${SMTP_PORT}" > /etc/ssmtp/ssmtp.conf && \
-echo "AuthUser=${SMTP_USER}" >> /etc/ssmtp/ssmtp.conf && \
-echo "AuthPass=${SMTP_PASS}" >> /etc/ssmtp/ssmtp.conf && \
-echo "UseTLS=YES" >> /etc/ssmtp/ssmtp.conf && \
+RUN  echo "mailhub=$SMTP_HOST:$SMTP_PORT" > /etc/ssmtp/ssmtp.conf && \
+echo "AuthUser=$SMTP_USER" >> /etc/ssmtp/ssmtp.conf && \
+echo "AuthPass=$SMTP_PASS" >> /etc/ssmtp/ssmtp.conf && \
 echo "UseSTARTTLS=YES" >> /etc/ssmtp/ssmtp.conf
 
 EXPOSE 80 443 2015
